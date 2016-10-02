@@ -1,7 +1,8 @@
+import angular from 'angular'
 import _ from 'lodash'
 
-export class DetailController {
-  constructor ($stateParams, $http, LIB_URL) {
+class DetailController {
+  constructor($stateParams, $http, LIB_URL) {
     this.type = $stateParams.type
     this.data = $stateParams.data
     this.list = []
@@ -11,6 +12,9 @@ export class DetailController {
         this.list = _(res)
           .filter((track) => track[this.type] === this.data)
           .value()
-      })
+   }) 
   }
 }
+angular
+  .module('app')
+  .controller('DetailController', DetailController)

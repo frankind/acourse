@@ -1,4 +1,10 @@
-export default function ($stateProvider, $urlRouterProvider, $locationProvider) {
+import angular from 'angular'
+
+angular
+  .module('app')
+  .config(Config)
+
+function Config ($stateProvider, $urlRouterProvider, $locationProvider) {
   $locationProvider.html5Mode(true)
   $urlRouterProvider.otherwise('/')
   $stateProvider

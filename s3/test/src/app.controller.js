@@ -1,27 +1,23 @@
-import angular from 'angular'
 import _ from 'lodash'
 
-angular
-  .module('app')
-  .controller('AppController', AppController)
-function AppController ($http, LIB_URL) {
-  const vm = this
-  vm.name = 'frankind'
-  vm.list = []
-  vm.select = 'Artist'
-  vm.tracks = []
-  vm.resetList = resetList
-  $http.get(LIB_URL)
-    .then((res) => res.data)
-    .then((res) => {
-      vm.tracks = res
-      resetList()
-    })
-  function resetList () {
-    vm.list = _(vm.tracks)
-      .map((track) => track[vm.select])
+export class AppController {
+  constructor ($http, LIB_URL) {
+    this.name = 'frankind'
+    this.list = []
+    this.select = 'Artist'
+    this.tracks = []
+    $http.get(LIB_URL)
+      .then((res) => res.data)
+      .then((res) => {
+        this.tracks = res
+        this.resetList()
+      })
+  }
+  resetList () {
+    this.list = _(this.tracks)
+      .map((track) => track[this.select])
       .uniq()
-      .value() 
-    console.log(vm.list)
+      .value()
+      // console.log(vm.list)
   }
 }

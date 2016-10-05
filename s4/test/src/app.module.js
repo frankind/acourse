@@ -1,7 +1,7 @@
 import angular from 'angular'
 
 import Config from './app.config'
-import { AuthController } from './auth.controller'
+import { AuthController } from './controllers/auth.controller'
 
 angular
     .module('app', ['ui.router'])

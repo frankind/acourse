@@ -1,0 +1,50 @@
+<div class="ui fluid container">
+  <div class="ui center aligned grid">
+    <div class="row">
+      <div class="column">
+        <img class="ui small centered image" src="../assets/acourse.svg">
+      </div>
+    </div>
+    <div class="row">
+      <div class="column">
+        <h1>Acourse</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="ui center aligned stacked segment" style="min-width: 500px;">
+        <div class="ui left aligned fluid container">
+          <div class="ui form" ng-submit="vm.signUp()">
+            <div class="ui center aligned basic fluid container" ng-if="vm.isForgotPassword === true">
+              <h3>Reset Password</h3>
+            </div>
+            <div class="field">
+              <label>Email</label>
+              <input ng-model="vm.email">
+            </div>
+            <div class="field" ng-if="vm.isForgotPassword === false">
+              <label>Password</label>
+              <input type="password" ng-model="vm.password">
+            </div>
+            <div class="ui fluid basic segment" ng-if="vm.isSignIn === false">
+              <a href="#" ng-click="vm.doSignIn()">
+                <i class="left chevron icon">
+                </i> Sign In
+            </div>
+            </a>
+            <div class="ui right aligned basic fluid container" ng-if="vm.isSignIn === true">
+              <a href="#" ng-click="vm.doForgotPassword()">ForgotPassword?</a> /
+              <a href="#" ng-click="vm.doRegister()">Register</a>
+            </div>
+            <button ng-click="vm.signUp()" class="ui blue fluid button" ng-if="vm.isSignUp === true">Sign Up</button>
+            <button ng-click="vm.signIn()" class="ui blue fluid button" ng-class="{loading: vm.signInLoading}" ng-if="vm.isSignIn === true">Sign In</button>
+            <button ng-click="vm.reset()" class="ui blue fluid button" ng-class="{loading: vm.signInLoading}" ng-if="vm.isForgotPassword === true">Reset</button>
+            <br>
+            <button ng-click="vm.googleSignIn()" class="ui red fluid button" ng-class="{loading: vm.signInLoading}">Google Sign In</button>
+            <br>
+            <button ng-click="vm.signOut()" class="ui pink fluid button" ng-class="{loading: vm.signInLoading}">Sign Out</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

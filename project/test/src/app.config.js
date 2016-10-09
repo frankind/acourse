@@ -18,7 +18,9 @@ export default function ($stateProvider, $urlRouterProvider, $locationProvider) 
   $stateProvider
     .state('auth', {
       abstract: true,
-      template: require('./views/auth.html')
+      template: require('./views/auth.html'),
+      resolve: {
+      redirectToHomeIfAuth}
     })
     .state('auth.signin', {
       url: '/',
@@ -29,11 +31,15 @@ export default function ($stateProvider, $urlRouterProvider, $locationProvider) 
     .state('auth.register', {
       url: '/register',
       template: require('./views/register.html')
-      // controller: 'SignUpController',
-      // controllerAs: 'vm'
+    // controller: 'SignUpController',
+    // controllerAs: 'vm'
     })
     .state('layout', {
-      template: require('./views/layout.html')
+      template: require('./views/layout.html'),
+      controller: 'LayoutController',
+      controllerAs: 'vm',
+      resolve: {
+      redirectToAuthIfNotAuth}
     })
     .state('home', {
       url: '/home',
@@ -54,4 +60,46 @@ export default function ($stateProvider, $urlRouterProvider, $locationProvider) 
       controller: 'EditProfileController',
       controllerAs: 'vm'
     })
+}
+
+function redirectToHomeIfAuth ($q, $state, $firebase) {
+  'ngInject'
+  // Redirect without defer
+  // $firebase.currentUser()
+  //   .subscribe((user) => {
+  //     if (user) {
+  //       $state.go('home')
+  //     }
+  //   })
+  // Another with defer
+  const defer = $q.defer()
+  $firebase.currentUser()
+    .subscribe((user) => {
+      if (user) {
+        defer.reject()
+        $state.go('home')
+      } else {
+        defer.resolve()
+      }
+    })
+  return defer.promise
+// Normal
+// return $q((resolve, reject) => {
+//   reject()
+// })
+}
+
+function redirectToAuthIfNotAuth ($q, $state, $firebase) {
+  'ngInject'
+  const defer = $q.defer()
+  $firebase.currentUser()
+    .subscribe((user) => {
+      if (!user) {
+        defer.reject()
+        $state.go('auth.signin')
+      } else {
+        defer.resolve()
+      }
+    })
+  return defer.promise
 }

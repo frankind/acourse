@@ -1,10 +1,11 @@
 export class EditProfileController {
-  constructor ($me, $state) {
+  constructor ($me, $state, $scope) {
     'ngInject'
     this.$me = $me
     this.$state = $state
     this.name = ''
     this.aboutMe = ''
+    this.$scope = $scope
     // const me$ = $me.getProfile()
     $me.getProfile()
       .first()
@@ -13,23 +14,16 @@ export class EditProfileController {
           // console.log(profile)
           this.name = profile.name
           this.aboutMe = profile.aboutMe
+          this.photo = profile.photo
         }
     )
-  // $me.getProfile((profile) => {
-  //   this.name = profile.name
-  //   this.aboutMe = profile.aboutMe
-  // })
-  // No need to unsubscribe if we get only first from observable
-  // $scope.$on('$destroy', () => {
-  //   console.log('destroy')
-  //   me$.unsubscribe()
-  // })
   }
   save () {
     this.saving = true
     this.$me.saveProfile({
       name: this.name,
-      aboutMe: this.aboutMe
+      aboutMe: this.aboutMe,
+      photo: this.photo
     })
       .subscribe(() => {
         this.saving = false
@@ -39,5 +33,13 @@ export class EditProfileController {
   //   this.saving = false
   //   this.$state.go('profile')
   // })
+  }
+  selectedFile (file) {
+    const f = file.files[ 0 ]
+    if (!f) return
+    this.$me.upload(f)
+      .subscribe((res) => {
+        this.photo = res
+      })
   }
 }

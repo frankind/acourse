@@ -7,14 +7,19 @@ export class FirebaseService {
     'ngInject'
     this.$q = $q
     this.$rootScope = $rootScope
-    this.currentUser = new BehaviorSubject()
+    this._currentUser = new BehaviorSubject()
 
     firebase.auth().onAuthStateChanged((user) => {
       console.log(user)
-      this.currentUser.next(user)
+      this._currentUser.next(user)
+    // this.currentUser.next(user)
     })
   // For caching data first
   // firebase.database().ref('user').on('value', () => {})
+  }
+
+  currentUser () {
+    return this._currentUser.filter((x) => x !== undefined)
   }
 
   signOut () {
@@ -90,5 +95,24 @@ export class FirebaseService {
       }, 0)
     })
   }
-
+  upload (path, file) {
+    return Observable.create((o) => {
+      firebase.storage().ref(path).put(file)
+        .then((res) => {
+          setTimeout(() => {
+            this.$rootScope.$apply(() => {
+              o.next(res)
+              o.complete()
+            })
+          }, 0)
+        }, (err) => {
+          setTimeout(() => {
+            this.$rootScope.$apply(() => {
+              o.error(err)
+              o.complete()
+            })
+          }, 0)
+        })
+    })
+  }
 }

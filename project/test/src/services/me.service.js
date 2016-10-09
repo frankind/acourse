@@ -23,4 +23,5 @@ export class MeService {
       .flatMap(({uid}) => this.$firebase.upload(`user/${uid}/${Date.now()}`, file))
       .map((res) => res.downloadURL)
   }
+
 }

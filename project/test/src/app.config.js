@@ -51,7 +51,9 @@ export default function ($stateProvider, $urlRouterProvider, $locationProvider) 
     .state('profile', {
       url: '/profile',
       parent: 'layout',
-      template: require('./views/profile.html')
+      template: require('./views/profile.html'),
+      controller: 'ProfileController',
+      controllerAs: 'vm'
     })
     .state('edit-profile', {
       url: '/profile/edit',

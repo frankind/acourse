@@ -44,23 +44,27 @@ export default function ($stateProvider, $urlRouterProvider, $locationProvider) 
     .state('home', {
       url: '/home',
       parent: 'layout',
-      template: require('./views/home.html'),
-      controller: 'HomeController',
-      controllerAs: 'vm'
+      template: '<home></home>'
     })
     .state('profile', {
       url: '/profile',
       parent: 'layout',
-      template: require('./views/profile.html'),
-      controller: 'ProfileController',
-      controllerAs: 'vm'
+      template: '<profile></profile>'
     })
     .state('edit-profile', {
       url: '/profile/edit',
       parent: 'layout',
-      template: require('./views/edit-profile.html'),
-      controller: 'EditProfileController',
-      controllerAs: 'vm'
+      template: '<profile-edit></profile-edit>'
+    })
+    .state('course-create', {
+      url: '/course/create',
+      parent: 'layout',
+      template: '<course-create></course-create>'
+    })
+    .state('course-view', {
+      url: '/course/:id',
+      parent: 'layout',
+      template: '<course-view></course-view>'
     })
 }
 

@@ -60,6 +60,16 @@ export class FirebaseService {
     })
   }
 
+  push (path, data) {
+    return Observable.fromPromise(
+      this.$q((resolve, reject) => {
+        firebase.database().ref(path).push(data)
+          .then(resolve, reject)
+      })
+    )
+  }
+
+  // Return key and value
   onValue (path) {
     return Observable.create((o) => {
       const ref = firebase.database().ref(path)
@@ -68,6 +78,30 @@ export class FirebaseService {
           console.log('got data')
           this.$rootScope.$apply(() => {
             o.next(snapshot.val())
+          })
+        }, 0)
+      })
+      return () => {
+        ref.off('value', fn)
+      }
+    })
+  }
+
+  onArrayValue (path) {
+    return Observable.create((o) => {
+      const ref = firebase.database().ref(path)
+      const fn = ref.on('value', (snapshots) => {
+        const result = []
+        // Order key from low to high
+        snapshots.forEach((snapshot) => {
+          const x = snapshot.val()
+          x.id = snapshot.key
+          result.push(x)
+        })
+        setTimeout(() => {
+          console.log('got data')
+          this.$rootScope.$apply(() => {
+            o.next(result)
           })
         }, 0)
       })
@@ -114,5 +148,8 @@ export class FirebaseService {
           }, 0)
         })
     })
+  }
+  get timestamp () {
+    return firebase.database.ServerValue.TIMESTAMP
   }
 }

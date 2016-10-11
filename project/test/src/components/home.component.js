@@ -6,11 +6,15 @@ class HomeController {
   }
 
   $onInit () {
-    this.$course.list()
+    this.courseList = this.$course.list()
       .subscribe((courses) => {
         this.courses = courses
       }
     )
+  }
+  $onDestroy () {
+    console.log('Home destroy')
+    this.courseList.unsubscribe()
   }
 }
 export default {

@@ -9,14 +9,15 @@ class CourseViewContoller {
   $postLink () {
     $('.rating').rating()
   }
-  
+
   $onInit () {
     this.course$ = this.$course.get(this.courseId)
       .subscribe((course) => {
         this.course = course
       })
   }
-  $onDestroy () {
+  $onDestroy() {
+    console.log('Course View destroy')
     this.course$.unsubscribe()
   }
 }

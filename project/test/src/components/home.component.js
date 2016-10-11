@@ -1,7 +1,6 @@
 class HomeController {
-  constructor ($firebase, $state, $course) {
+  constructor ($state, $course) {
     'ngInject'
-    this.$firebase = $firebase
     this.$state = $state
     this.$course = $course
   }

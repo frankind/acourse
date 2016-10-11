@@ -3,22 +3,21 @@ export class CourseService {
     'ngInject'
     this.$firebase = $firebase
   }
-  create ({name, description}) {
+  create ({ name, description }) {
     return this.$firebase.currentUser()
-      .flatMap(({uid}) => this.$firebase.push('course', {
+      .flatMap(({ uid }) => this.$firebase.push('course', {
         name,
         description,
         owner: uid,
         timestamp: this.$firebase.timestamp
-      }
-      ))
+      }))
   }
 
-  list() {
+  list () {
     return this.$firebase.onArrayValue('course')
   }
 
-  get(id) {
+  get (id) {
     return this.$firebase.onValue(`course/${id}`)
   }
 }

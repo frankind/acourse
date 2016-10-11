@@ -5,9 +5,11 @@ class CourseViewContoller {
     this.courseId = $state.params.id
     this.course = null
   }
+  
   $postLink () {
     $('.rating').rating()
   }
+  
   $onInit () {
     this.course$ = this.$course.get(this.courseId)
       .subscribe((course) => {

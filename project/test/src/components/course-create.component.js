@@ -16,6 +16,7 @@ class CourseCreate {
       })
   }
 }
+
 export default {
   selector: 'courseCreate',
   template: require('./course-create.component.html'),

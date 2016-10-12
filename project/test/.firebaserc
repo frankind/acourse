@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "acourse-frankind"
+    "default": "acourse-frankind",
+    "staging": "acourse-staging"
   }
 }

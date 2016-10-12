@@ -4,6 +4,9 @@ import CourseCreateComponent from './course-create.component'
 import CourseCardComponent from './course-card.component'
 import HomeComponent from './home.component'
 import CourseViewComponent from './course-view.component'
+import CourseEditComponent from './course-edit.component'
+import CourseFormComponent from './course-form.component'
+import CourseChatComponent from './course-chat.component'
 
 export default [
   ProfileComponent,
@@ -11,5 +14,8 @@ export default [
   CourseCreateComponent,
   CourseCardComponent,
   HomeComponent,
-  CourseViewComponent
+  CourseViewComponent,
+  CourseEditComponent,
+  CourseFormComponent,
+  CourseChatComponent
 ]

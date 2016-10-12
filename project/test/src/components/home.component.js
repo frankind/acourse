@@ -8,6 +8,7 @@ class HomeController {
   $onInit () {
     this.courseList = this.$course.list()
       .subscribe((courses) => {
+        console.log(courses)
         this.courses = courses
       }
     )

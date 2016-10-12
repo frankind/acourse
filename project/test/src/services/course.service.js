@@ -13,11 +13,35 @@ export class CourseService {
       }))
   }
 
+  save (id, data) {
+    return this.$firebase.update(`course/${id}`, data)
+  }
+
   list () {
-    return this.$firebase.onArrayValue('course')
+    const ref = this.$firebase.ref('course').orderByChild('open').equalTo(true)
+    return this.$firebase.onArrayValue(ref)
   }
 
   get (id) {
     return this.$firebase.onValue(`course/${id}`)
+  }
+
+  ownCourses (userId) {
+    const ref = this.$firebase.ref('course').orderByChild('owner').equalTo(userId)
+    return this.$firebase.onArrayValue(ref)
+  }
+
+  sendMessage (id, message) {
+    return this.$firebase.push(`chat/${id}`, message)
+  }
+
+  messages (id) {
+    // return this.$firebase.onArrayValue(`chat/${id}`)
+    const ref = this.$firebase.ref(`chat/${id}`).limitToLast(3)
+    return this.$firebase.onChildAdded(ref)
+  }
+
+  applyCourse (id, userId) {
+    return this.$firebase.set(`course/${id}/student/${userId}`, true)
   }
 }

@@ -1,5 +1,6 @@
 import firebase from 'firebase'
 import { Observable, BehaviorSubject } from 'rxjs'
+import _ from 'lodash'
 
 export class FirebaseService {
 
@@ -54,10 +55,21 @@ export class FirebaseService {
   // }
 
   set (path, data) {
-    return this.$q((resolve, reject) => {
-      firebase.database().ref(path).set(data)
-        .then(resolve, reject)
-    })
+    return Observable.fromPromise(
+      this.$q((resolve, reject) => {
+        firebase.database().ref(path).set(data)
+          .then(resolve, reject)
+      })
+    )
+  }
+
+  update (path, data) {
+    return Observable.fromPromise(
+      this.$q((resolve, reject) => {
+        firebase.database().ref(path).update(data)
+          .then(resolve, reject)
+      })
+    )
   }
 
   push (path, data) {
@@ -69,10 +81,19 @@ export class FirebaseService {
     )
   }
 
+  remove (path) {
+    return Observable.fromPromise(
+      this.$q((resolve, reject) => {
+        firebase.database().ref(path).remove()
+          .then(resolve, reject)
+      })
+    )
+  }
+
   // Return key and value
-  onValue (path) {
+  onValue (ref) {
     return Observable.create((o) => {
-      const ref = firebase.database().ref(path)
+      ref = _.isString(ref) ? this.ref(ref) : ref
       const fn = ref.on('value', (snapshot) => {
         setTimeout(() => {
           console.log('got data')
@@ -87,9 +108,9 @@ export class FirebaseService {
     })
   }
 
-  onArrayValue (path) {
+  onArrayValue (ref) {
     return Observable.create((o) => {
-      const ref = firebase.database().ref(path)
+      ref = _.isString(ref) ? this.ref(ref) : ref
       const fn = ref.on('value', (snapshots) => {
         const result = []
         // Order key from low to high
@@ -110,15 +131,6 @@ export class FirebaseService {
       }
     })
   }
-  // onValue (path, callback) {
-  //   firebase.database().ref(path).on('value', (snapshot) => {
-  //     setTimeout(() => {
-  //       this.$rootScope.$apply(() => {
-  //         callback(snapshot.val())
-  //       })
-  //     }, 0)
-  //   })
-  // }
 
   onceValue (path, callback) {
     firebase.database().ref(path).once('value', (snapshot) => {
@@ -151,5 +163,26 @@ export class FirebaseService {
   }
   get timestamp () {
     return firebase.database.ServerValue.TIMESTAMP
+  }
+
+  ref (path) {
+    return firebase.database().ref(path)
+  }
+
+  onChildAdded (ref) {
+    return Observable.create((o) => {
+      ref = _.isString(ref) ? this.ref(ref) : ref
+      const fn = ref.on('child_added', (snapshot) => {
+        setTimeout(() => {
+          console.log('got child add data')
+          this.$rootScope.$apply(() => {
+            o.next(snapshot.val())
+          })
+        }, 0)
+      })
+      return () => {
+        ref.off('child_added', fn)
+      }
+    })
   }
 }

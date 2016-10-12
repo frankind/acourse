@@ -1,21 +1,20 @@
 export class MeService {
-  constructor ($firebase) {
+  constructor ($firebase, $course) {
     'ngInject'
     this.$firebase = $firebase
+    this.$course = $course
   }
+
   saveProfile (profile) {
     // const currentUser = this.$firebase.currentUser()
     // return this.$firebase.set(`user/${currentUser.uid}`, profile)
     return this.$firebase.currentUser()
       .flatMap((currentUser) => this.$firebase.set(`user/${currentUser.uid}`, profile))
   }
-  // getProfile(callback) {
+
   getProfile () {
     return this.$firebase.currentUser()
       .flatMap((currentUser) => this.$firebase.onValue(`user/${currentUser.uid}`))
-  // const currentUser = this.$firebase.currentUser()
-  // return this.$firebase.onValue(`user/${currentUser.uid}`)
-  // return this.$firebase.onceValue(`user/${currentUser.uid}`,callback)
   }
 
   upload (file) {
@@ -24,4 +23,13 @@ export class MeService {
       .map((res) => res.downloadURL)
   }
 
+  myOwnCourse () {
+    return this.$firebase.currentUser()
+      .flatMap(({uid}) => this.$course.ownCourses(uid))
+  }
+
+  applyCourse (id) {
+    return this.$firebase.currentUser()
+      .flatMap(({uid}) => this.$course.applyCourse(id, uid))
+  }
 }

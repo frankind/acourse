@@ -30,9 +30,9 @@ export default function ($stateProvider, $urlRouterProvider, $locationProvider) 
     })
     .state('auth.register', {
       url: '/register',
-      template: require('./views/register.html')
-    // controller: 'SignUpController',
-    // controllerAs: 'vm'
+      template: require('./views/register.html'),
+      controller: 'SignUpController',
+      controllerAs: 'vm'
     })
     .state('layout', {
       template: require('./views/layout.html'),

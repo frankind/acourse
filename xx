@@ -1,0 +1,15 @@
+// "favorite": {
+    //   "$course_id":{
+    //     "$user_id":{
+    //        ".validate": "auth.uid === $user_id && newData.val() === true"
+    //     }
+    //   } //ref(`favorite/${courseId}`).on('value',(snapshot)=> snapshot.numChildren())
+    // },
+
+    // "favorite:": {
+    //   "$course_id": {
+    //     "$user_id": {
+    //       ".validate": "auth.uid ===  $user_id && newData.val() === true"
+    //     }
+    //   }
+    // },

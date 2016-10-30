@@ -1,20 +1,24 @@
+import { Observable } from 'rxjs'
 export class MeService {
-  constructor ($firebase, $course) {
+  constructor ($firebase, $course, $user) {
     'ngInject'
     this.$firebase = $firebase
     this.$course = $course
+    this.$user = $user
   }
 
   saveProfile (profile) {
-    // const currentUser = this.$firebase.currentUser()
-    // return this.$firebase.set(`user/${currentUser.uid}`, profile)
     return this.$firebase.currentUser()
       .flatMap((currentUser) => this.$firebase.set(`user/${currentUser.uid}`, profile))
   }
 
   getProfile () {
     return this.$firebase.currentUser()
-      .flatMap((currentUser) => this.$firebase.onValue(`user/${currentUser.uid}`))
+      .flatMap(({ uid }) =>
+        Observable.combineLatest(
+          this.$user.get(uid),
+          this.$user.isInstructor(uid)))
+        .map(([user, isInstructor]) => ({...user, isInstructor}))
   }
 
   upload (file) {
@@ -31,5 +35,10 @@ export class MeService {
   applyCourse (id) {
     return this.$firebase.currentUser()
       .flatMap(({uid}) => this.$course.applyCourse(id, uid))
+  }
+
+  course () {
+    return this.$firebase.currentUser()
+      .flatMap(({uid}) => this.$course.user(uid))
   }
 }
